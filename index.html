@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Information</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <h1>Device Information</h1>
+        <div class="info">
+            <p><strong>Device Model:</strong> <span id="device-model">Loading...</span></p>
+            <p><strong>Operating System:</strong> <span id="os">Loading...</span></p>
+            <p><strong>Battery Level:</strong> <span id="battery-level">Loading...</span>%</p>
+            <p><strong>Charging Status:</strong> <span id="charging-status">Loading...</span></p>
+            <p><strong>Device Sensors:</strong> <span id="sensors">Loading...</span></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Battery Status API
+if ('getBattery' in navigator) {
+    navigator.getBattery().then(function(battery) {
+        function updateBatteryStatus() {
+            const batteryLevel = Math.round(battery.level * 100); // Battery level in percentage
+            const chargingStatus = battery.charging ? "Charging" : "Not Charging";
+            
+            // Update HTML content
+            document.getElementById('battery-level').textContent = batteryLevel;
+            document.getElementById('charging-status').textContent = chargingStatus;
+        }
+
+        // Initial battery status update
+        updateBatteryStatus();
+
+        // Update battery status on changes
+        battery.addEventListener('chargingchange', updateBatteryStatus);
+        battery.addEventListener('levelchange', updateBatteryStatus);
+    });
+} else {
+    document.getElementById('battery-level').textContent = "Not Supported";
+    document.getElementById('charging-status').textContent = "Not Supported";
+}
+
+// Device information (simulated, because JavaScript can't fetch it directly)
+document.getElementById('device-model').textContent = navigator.userAgent; // User agent string as a device model
+document.getElementById('os').textContent = navigator.platform; // Operating system
+document.getElementById('sensors').textContent = "Accelerometer, Gyroscope, Proximity Sensor"; // Example sensors
+
+
+    </script>
+</body>
+</html>
